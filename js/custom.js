@@ -14,6 +14,113 @@ var timeFrame = "Day";
 //set todays date as default date
 $("#current-date").text(today);
 
+var Allappointments = [
+  {
+    id: 1,
+    title: "Appointment 1",
+    date: "21/12/2021",
+    start: "12:00",
+    end: "13:00",
+    staff: "Staff 1",
+    staffid: 1,
+    amount: "$45"
+  },
+  {
+    id: 2,
+    title: "Appointment 2",
+    date: "21/12/2021",
+    start: "13:00",
+    end: "14:00",
+    staff: "Staff 4",
+    staffid: 4,
+    amount: "$50"
+  },
+  {
+    id: 3,
+    title: "Appointment 2",
+    date: "21/12/2021",
+    start: "14:00",
+    end: "15:00",
+    staff: "Staff 2",
+    staffid: 2,
+    amount: "$50"
+  },
+  {
+    id: 4,
+    title: "Appointment 2",
+    date: "21/12/2021",
+    start: "15:00",
+    end: "16:00",
+    staff: "Staff 5",
+    staffid: 5,
+    amount: "$60"
+  },
+  {
+    id: 5,
+    title: "Appointment 2",
+    date: "21/12/2021",
+    start: "17:00",
+    end: "18:00",
+    staff: "Staff 3",
+    staffid: 3,
+    amount: "$90"
+  },
+  {
+    id: 6,
+    title: "Appointment 2",
+    date: "22/12/2021",
+    start: "17:00",
+    end: "18:00",
+    staff: "Staff 3",
+    staffid: 3,
+    amount: "$90"
+  },
+  {
+    id: 7,
+    title: "Appointment 7",
+    date: "20/12/2021",
+    start: "12:00",
+    end: "13:00",
+    staff: "Staff 2",
+    staffid: 2,
+    amount: "$70"
+  }
+];
+
+var openingTime = 12;
+var closingTime = 18;
+
+var AllStaffs = [
+  {
+    id: 1,
+    name: "Staff 1"
+  },
+  {
+    id: 2,
+    name: "Staff 2"
+  },
+  {
+    id: 3,
+    name: "Staff 3"
+  },
+  {
+    id: 4,
+    name: "Staff 4"
+  },
+  {
+    id: 5,
+    name: "Staff 5"
+  },
+  {
+    id: 6,
+    name: "Staff 6"
+  }
+];
+
+//default time frame is day so we will make day Table and get todays appointments
+dayTable();
+CurrentDateAppointments();
+
 //On day btn click set time frame to Day
 $("#day-timeframe").on("click", function () {
   timeFrame = "Day";
@@ -27,6 +134,9 @@ $("#day-timeframe").on("click", function () {
   //set current date
   currentDate = moment(currentDate).format(DateFormat);
   $("#current-date").text(currentDate);
+
+  dayTable();
+  CurrentDateAppointments();
 });
 
 //On week btn click set time frame to Week
@@ -72,6 +182,8 @@ $("#nxt-date").on("click", function () {
     var next = moment(currentDate).add(1, "days").format(DateFormat);
     currentDate = moment(currentDate).add(1, "days");
     $("#current-date").text(next);
+    dayTable();
+    CurrentDateAppointments();
   }
   //if time frame is Week increment current date by 1 week
   else if (timeFrame == "Week") {
@@ -96,6 +208,8 @@ $("#prev-date").on("click", function () {
     var prev = moment(currentDate).subtract(1, "days").format(DateFormat);
     currentDate = moment(currentDate).subtract(1, "days");
     $("#current-date").text(prev);
+    dayTable();
+    CurrentDateAppointments();
   }
   //if time frame is Week decrement current date by 1 week
   else if (timeFrame == "Week") {
@@ -122,6 +236,8 @@ $("#today").on("click", function () {
     var today = moment().format("dddd DD MMM,YYYY");
     currentDate = moment();
     $("#current-date").text(today);
+    dayTable();
+    CurrentDateAppointments();
   } else if (timeFrame == "Week") {
     var weekstartDate = moment().startOf("isoWeek");
     var weekendDate = moment().endOf("isoWeek");
@@ -136,59 +252,6 @@ $("#today").on("click", function () {
   }
 });
 
-var Allappointments = [
-  {
-    id: 1,
-    title: "Appointment 1",
-    date: "21/12/2021",
-    start: "12:00",
-    end: "13:00",
-    staff: "Staff 1",
-    staffid: 1,
-    amount: "$45"
-  },
-  {
-    id: 2,
-    title: "Appointment 2",
-    date: "21/12/2021",
-    start: "13:00",
-    end: "14:00",
-    staff: "Staff 1",
-    staffid: 1,
-    amount: "$50"
-  }
-];
-
-var openingTime = 12;
-var closingTime = 18;
-
-var AllStaffs = [
-  {
-    id: 1,
-    name: "Staff 1"
-  },
-  {
-    id: 2,
-    name: "Staff 2"
-  },
-  {
-    id: 3,
-    name: "Staff 3"
-  },
-  {
-    id: 4,
-    name: "Staff 4"
-  },
-  {
-    id: 5,
-    name: "Staff 5"
-  },
-  {
-    id: 6,
-    name: "Staff 6"
-  }
-];
-
 //generate staff dropdown
 for (var i = 0; i < AllStaffs.length; i++) {
   var staff =
@@ -200,71 +263,74 @@ for (var i = 0; i < AllStaffs.length; i++) {
   $("#staffdropdown").append(staff);
 }
 
-//select dayChart Table
-var dayTable = $("#dayChart");
-//generate table according to opening time and closing time
-for (var i = openingTime; i <= closingTime; i++) {
-  var time = moment().hour(i).minute(0).format("HH:mm");
-  //1st column is time and others are staff columns
-  var row =
-    '<tr class="time-slot" data-time="' +
-    i +
-    '"><td width="30px;" class="schedule-time sch-time"><strong>' +
-    time +
-    "</strong></td>";
-  for (var j = 0; j < AllStaffs.length; j++) {
-    row +=
-      '<td class="p-0 staff-column" width="150px;" data-staff="' +
-      AllStaffs[j].id +
-      '">';
-    row +=
-      '<button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button></td>';
+function dayTable() {
+  //select dayChart Table
+  var dayTable = $("#dayChart");
+  //remove all rows except first
+  dayTable.find("tr:gt(0)").remove();
+  //generate table according to opening time and closing time
+  for (var i = openingTime; i <= closingTime; i++) {
+    var time = moment().hour(i).minute(0).format("HH:mm");
+    //1st column is time and others are staff columns
+    var row =
+      '<tr class="time-slot" data-time="' +
+      i +
+      '"><td width="30px;" class="schedule-time sch-time"><strong>' +
+      time +
+      "</strong></td>";
+    for (var j = 0; j < AllStaffs.length; j++) {
+      row +=
+        '<td class="p-0 staff-column" width="150px;" data-staff="' +
+        AllStaffs[j].id +
+        '">';
+      row +=
+        '<button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button></td>';
+    }
+    row += "</tr>";
+    dayTable.append(row);
   }
-  row += "</tr>";
-  dayTable.append(row);
-//   $(".staff-column").css("border-left", "1px solid #e5dada");
-//   $(".staff-column").css("border-right", "1px solid #e5dada");
 }
 
 //this function will return all the appointments for given time
 function getAppointments(time) {
   var appointments = [];
   for (var i = 0; i < Allappointments.length; i++) {
-    if (Allappointments[i].start == time) {
+    if (Allappointments[i].start == time && Allappointments[i].date == currentDate.format('DD/MM/YYYY')) {
       appointments.push(Allappointments[i]);
     }
   }
+
   return appointments;
 }
 
-//loop through time slots between 12:00 and 20:00
-for (var i = 12; i <= 20; i++) {
-  var time = moment().hour(i).minute(0).format("HH:mm");
-  console.log(time);
-  //get all the appointments for given time
-  var appointments = getAppointments(time);
-  console.log(appointments);
-  //if appointments exist for given time
-  if (appointments.length > 0) {
-    //loop through appointments
-    for (var j = 0; j < appointments.length; j++) {
-      //create bar for each appointment
-      var bar =
-        '<div class="popover__wrapper text-center"><a href="#"><div class="popover__title"><p>' +
-        time +
-        '</p> <h4>Walk-In</h4><small>Mens Cut</small> </div></a>  <div class="popover__content"><p class="popover__message"><strong>Walk-In</strong></p><table class="table table-bordered m-0 bg-whirt"><td><p class="m-0">' +
-        appointments[j].start +
-        "PM to " +
-        appointments[j].end +
-        'PM </p><h5 class="m-0"><strong>Ladies Haircut</strong></h5><small>45 Min with ' +
-        appointments[j].staff +
-        '</small>   </td><td class="align-middle"><strong>' +
-        appointments[j].amount +
-        "</strong></td></table></div></div>";
-      // add bar to time slot
-      $(".time-slot[data-time='" + i + "']")
-        .find(".staff-column[data-staff='" + appointments[j].staffid + "']")
-        .html(bar)
+function CurrentDateAppointments() {
+  //loop through time slots between 12:00 and 20:00
+  for (var i = 12; i <= 20; i++) {
+    var time = moment().hour(i).minute(0).format("HH:mm");
+    //get all the appointments for given time
+    var appointments = getAppointments(time);
+    //if appointments exist for given time
+    if (appointments.length > 0) {
+      //loop through appointments
+      for (var j = 0; j < appointments.length; j++) {
+        //create bar for each appointment
+        var bar =
+          '<div class="popover__wrapper text-center"><a href="#"><div class="popover__title"><p>' +
+          time +
+          '</p> <h4>Walk-In</h4><small>Mens Cut</small> </div></a>  <div class="popover__content"><p class="popover__message"><strong>Walk-In</strong></p><table class="table table-bordered m-0 bg-whirt"><td><p class="m-0">' +
+          appointments[j].start +
+          "PM to " +
+          appointments[j].end +
+          'PM </p><h5 class="m-0"><strong>Ladies Haircut</strong></h5><small>45 Min with ' +
+          appointments[j].staff +
+          '</small>   </td><td class="align-middle"><strong>' +
+          appointments[j].amount +
+          "</strong></td></table></div></div>";
+        // add bar to time slot
+        $(".time-slot[data-time='" + i + "']")
+          .find(".staff-column[data-staff='" + appointments[j].staffid + "']")
+          .html(bar);
+      }
     }
   }
 }
