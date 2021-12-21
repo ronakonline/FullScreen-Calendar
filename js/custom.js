@@ -129,6 +129,9 @@ var selectedStaff = 0;
 dayTable();
 //calling CurrentDateAppointments function will add appointments of curent date to day table
 CurrentDateAppointments();
+//hiding other tables
+$('#3dayTable').hide();
+$('#weekTable').hide();
 
 //Process of time frame button click
 //user clicks timeframe button day,week,month
@@ -154,6 +157,9 @@ $("#day-timeframe").on("click", function () {
 
   dayTable();
   CurrentDateAppointments();
+  $('#3dayTable').hide();
+  $('#weekTable').hide();
+  $('#dayChart').show();
 });
 
 //On week btn click set time frame to Week
@@ -175,6 +181,9 @@ $("#week-timeframe").on("click", function () {
   $("#current-date").text(
     currentDate.format(DateFormat) + " - " + endDate.format(DateFormat)
   );
+  $('#3dayTable').hide();
+  $('#dayChart').hide();
+  $('#weekTable').show();
 });
 
 //On month btn click set time frame to Month
@@ -191,6 +200,9 @@ $("#threedays-timeframe").on("click", function () {
   //set current date to first day of the month
   currentDate = moment(currentDate).startOf("month");
   $("#current-date").text(currentDate.format(DateFormat));
+  $('#dayChart').hide();
+  $('#weekTable').hide();
+  $('#3dayTable').show();
 });
 
 $("#nxt-date").on("click", function () {
@@ -281,6 +293,7 @@ for (var i = 0; i < AllStaffs.length; i++) {
 }
 
 function dayTable() {
+  console.log('called')
   //select dayChart Table
   var dayTable = $("#dayChart");
   //remove all rows except first
@@ -315,7 +328,7 @@ function getAppointments(time, staff) {
     if (staff == 0) {
       if (
         Allappointments[i].start == time &&
-        Allappointments[i].date == currentDate.format("DD/MM/YYYY")
+        Allappointments[i].date == moment(currentDate).format("DD/MM/YYYY")
       ) {
         appointments.push(Allappointments[i]);
       }
