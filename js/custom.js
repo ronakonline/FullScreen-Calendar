@@ -117,6 +117,8 @@ var AllStaffs = [
   }
 ];
 
+var selectedStaff = 0;
+
 //default time frame is day so we will make day Table and get todays appointments
 dayTable();
 CurrentDateAppointments();
@@ -292,23 +294,43 @@ function dayTable() {
 }
 
 //this function will return all the appointments for given time
-function getAppointments(time) {
+function getAppointments(time, staff) {
   var appointments = [];
   for (var i = 0; i < Allappointments.length; i++) {
-    if (Allappointments[i].start == time && Allappointments[i].date == currentDate.format('DD/MM/YYYY')) {
-      appointments.push(Allappointments[i]);
+    if (staff == 0) {
+      if (
+        Allappointments[i].start == time &&
+        Allappointments[i].date == currentDate.format("DD/MM/YYYY")
+      ) {
+        appointments.push(Allappointments[i]);
+      }
+    }else{
+        if (
+            Allappointments[i].start == time &&
+            Allappointments[i].date == currentDate.format("DD/MM/YYYY") &&
+            Allappointments[i].staffid == staff
+        ) {
+            appointments.push(Allappointments[i]);
+        }
     }
   }
 
   return appointments;
 }
 
+$('#staffdropdown').on('click', 'li', function () {
+    var staffid = $(this).attr('id');
+    selectedStaff = staffid;
+    dayTable();
+    CurrentDateAppointments();
+});
+
 function CurrentDateAppointments() {
   //loop through time slots between 12:00 and 20:00
   for (var i = 12; i <= 20; i++) {
     var time = moment().hour(i).minute(0).format("HH:mm");
     //get all the appointments for given time
-    var appointments = getAppointments(time);
+    var appointments = getAppointments(time,selectedStaff);
     //if appointments exist for given time
     if (appointments.length > 0) {
       //loop through appointments
