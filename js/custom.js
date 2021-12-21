@@ -144,7 +144,7 @@ $("#day-timeframe").on("click", function () {
   DateFormat = "dddd DD MMM,YYYY";
   //Unactive all time frame buttons
   $("#week-timeframe").removeClass("active");
-  $("#month-timeframe").removeClass("active");
+  $("#threedays-timeframe").removeClass("active");
   //Active current time frame button
   $(this).addClass("active");
 
@@ -163,7 +163,7 @@ $("#week-timeframe").on("click", function () {
   DateFormat = "DD MMM,YYYY";
   //Unactive all time frame buttons
   $("#day-timeframe").removeClass("active");
-  $("#month-timeframe").removeClass("active");
+  $("#threedays-timeframe").removeClass("active");
   //Active current time frame button
   $(this).addClass("active");
 
@@ -178,10 +178,10 @@ $("#week-timeframe").on("click", function () {
 });
 
 //On month btn click set time frame to Month
-$("#month-timeframe").on("click", function () {
-  timeFrame = "Month";
+$("#threedays-timeframe").on("click", function () {
+  timeFrame = "3 Days";
   //month time format is Month Year
-  DateFormat = "MMM,YYYY";
+  DateFormat = "DD,MM,YYYY";
   //Unactive all time frame buttons
   $("#day-timeframe").removeClass("active");
   $("#week-timeframe").removeClass("active");
@@ -212,9 +212,9 @@ $("#nxt-date").on("click", function () {
     );
   }
   //if time frame is Month increment current date by 1 month
-  else if (timeFrame == "Month") {
-    var next = moment(currentDate).add(1, "months").format(DateFormat);
-    currentDate = moment(currentDate).add(1, "months");
+  else if (timeFrame == "3 Days") {
+    var next = moment(currentDate).add(3, "days").format(DateFormat);
+    currentDate = moment(currentDate).add(3, "days");
     $("#current-date").text(next);
   }
 });
@@ -240,9 +240,9 @@ $("#prev-date").on("click", function () {
     );
   }
   //if time frame is Month decrement current date by 1 month
-  else if (timeFrame == "Month") {
-    var prev = moment(currentDate).subtract(1, "months").format(DateFormat);
-    currentDate = moment(currentDate).subtract(1, "months");
+  else if (timeFrame == "3 Days") {
+    var prev = moment(currentDate).subtract(3, "days").format(DateFormat);
+    currentDate = moment(currentDate).subtract(3, "days");
     $("#current-date").text(prev);
   }
 });
@@ -262,8 +262,8 @@ $("#today").on("click", function () {
     $("#current-date").text(
       weekstartDate.format(DateFormat) + " - " + weekendDate.format(DateFormat)
     );
-  } else if (timeFrame == "Month") {
-    var today = moment().format("MMM,YYYY");
+  } else if (timeFrame == "3 Days") {
+    var today = moment().format("DD,MM,YYYY");
     currentDate = moment();
     $("#current-date").text(today);
   }
