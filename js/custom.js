@@ -14,6 +14,7 @@ var timeFrame = "Day";
 //set todays date as default date
 $("#current-date").text(today);
 
+//all appoitnments list
 var Allappointments = [
   {
     id: 1,
@@ -87,9 +88,11 @@ var Allappointments = [
   }
 ];
 
+//opening time and closing time of salon
 var openingTime = 12;
 var closingTime = 18;
 
+//all staff list
 var AllStaffs = [
   {
     id: 1,
@@ -117,11 +120,23 @@ var AllStaffs = [
   }
 ];
 
+//selected staff id 
+//if staff id is 0 then all staffs are selected
 var selectedStaff = 0;
 
 //default time frame is day so we will make day Table and get todays appointments
+//calling dayTable function will clear our day table and generate new table according to opening time and closing time of salon
 dayTable();
+//calling CurrentDateAppointments function will add appointments of curent date to day table
 CurrentDateAppointments();
+
+//Process of time frame button click
+//user clicks timeframe button day,week,month
+//set time frame to selected time frame
+//set date format according to selected time frame
+//we will unactive all other time frame
+//we will active selected time frame
+//we will clear day table and generate new table according to time frame
 
 //On day btn click set time frame to Day
 $("#day-timeframe").on("click", function () {
