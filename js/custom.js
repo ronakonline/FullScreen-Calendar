@@ -206,6 +206,7 @@ $("#day-timeframe").on("click", function () {
 
 //On week btn click set time frame to Week
 $("#week-timeframe").on("click", function () {
+  selectedStaff=1;
   timeFrame = "Week";
   //week time format is Date Month Year - Date Month Year
   DateFormat = "DD MMM,YYYY";
@@ -228,6 +229,7 @@ $("#week-timeframe").on("click", function () {
   $("#weekTable").show();
 
   WeekTable();
+  weekAppointments();
 });
 
 //On month btn click set time frame to Month
@@ -273,6 +275,7 @@ $("#nxt-date").on("click", function () {
       weekstartDate.format(DateFormat) + " - " + weekendDate.format(DateFormat)
     );
     WeekTable();
+    weekAppointments();
   }
   //if time frame is Month increment current date by 1 month
   else if (timeFrame == "3 Days") {
@@ -306,6 +309,7 @@ $("#prev-date").on("click", function () {
       weekstartDate.format(DateFormat) + " - " + weekendDate.format(DateFormat)
     );
     WeekTable();
+    weekAppointments();
   }
   //if time frame is Month decrement current date by 1 month
   else if (timeFrame == "3 Days") {
@@ -334,6 +338,7 @@ $("#today").on("click", function () {
       weekstartDate.format(DateFormat) + " - " + weekendDate.format(DateFormat)
     );
     WeekTable();
+    weekAppointments();
   } else if (timeFrame == "3 Days") {
     var today = moment().format("DD,MM,YYYY");
     currentDate = moment();
@@ -354,6 +359,40 @@ for (var i = 0; i < AllStaffs.length; i++) {
   $("#staffdropdown").append(staff);
 }
 
+//Change Selected Staff and show appointments accordingly
+$("#staffdropdown").on("click", "li", function () {
+  var staffid = $(this).attr("id");
+  selectedStaff = staffid;
+  dayTable();
+  CurrentDateAppointments();
+});
+
+//this function will return all the appointments for given time
+function getAppointments(time, staff, date = currentDate) {
+  var appointments = [];
+  for (var i = 0; i < Allappointments.length; i++) {
+    if (staff == 0) {
+      if (
+        Allappointments[i].start == time &&
+        Allappointments[i].date == moment(date).format("DD/MM/YYYY")
+      ) {
+        appointments.push(Allappointments[i]);
+      }
+    } else {
+      if (
+        Allappointments[i].start == time &&
+        Allappointments[i].date == moment(date).format("DD/MM/YYYY") &&
+        Allappointments[i].staffid == staff
+      ) {
+        appointments.push(Allappointments[i]);
+      }
+    }
+  }
+
+  return appointments;
+}
+
+//Generate Day Table
 function dayTable() {
   //select dayChart Table
   var dayTable = $("#dayChart");
@@ -382,38 +421,7 @@ function dayTable() {
   }
 }
 
-//this function will return all the appointments for given time
-function getAppointments(time, staff, date = currentDate) {
-  var appointments = [];
-  for (var i = 0; i < Allappointments.length; i++) {
-    if (staff == 0) {
-      if (
-        Allappointments[i].start == time &&
-        Allappointments[i].date == moment(date).format("DD/MM/YYYY")
-      ) {
-        appointments.push(Allappointments[i]);
-      }
-    } else {
-      if (
-        Allappointments[i].start == time &&
-        Allappointments[i].date == moment(date).format("DD/MM/YYYY") &&
-        Allappointments[i].staffid == staff
-      ) {
-        appointments.push(Allappointments[i]);
-      }
-    }
-  }
-
-  return appointments;
-}
-
-$("#staffdropdown").on("click", "li", function () {
-  var staffid = $(this).attr("id");
-  selectedStaff = staffid;
-  dayTable();
-  CurrentDateAppointments();
-});
-
+//Get Appoitnmets for current date
 function CurrentDateAppointments() {
   //loop through time slots between 12:00 and 20:00
   for (var i = 12; i <= 20; i++) {
@@ -446,6 +454,7 @@ function CurrentDateAppointments() {
   }
 }
 
+//Generate Theree Days Table
 function ThreeDayTable() {
   var threedayTable = $("#ThreeDayTable");
   threedayTable.find("tr:gt(1)").remove();
@@ -480,6 +489,7 @@ function ThreeDayTable() {
   }
 }
 
+//Get Appoitnmets for three days
 function ThreeDayAppointments() {
   //loop throught time slots between opening time and closing time
   for (var i = openingTime; i <= closingTime; i++) {
@@ -579,6 +589,7 @@ function ThreeDayAppointments() {
   }
 }
 
+//Generate Week Table
 function WeekTable() {
   var weektable = $("#weekTable");
   //design week table header
@@ -609,5 +620,43 @@ function WeekTable() {
     }
     row += "</tr>";
     weektable.append(row);
+  }
+}
+
+//Get Week appointments
+function weekAppointments() {
+  var weektable = $("#weekTable");
+  for (var i = openingTime; i <= closingTime; i++) {
+    var time = moment().hour(i).minute(0).format("HH:mm");
+    for (var j = 0; j < 7; j++) {
+      var appointments = getAppointments(
+        time,
+        selectedStaff,
+        moment(currentDate).add(j, "days")
+      );
+      if (appointments.length > 0) {
+        for (var k = 0; k < appointments.length; k++) {
+          var bar =
+            '<div class="popover__wrapper text-center"><a href="#"><div class="popover__title"><p>' +
+            time +
+            '</p> <h4>Walk-In</h4><small>Mens Cut</small> </div></a>  <div class="popover__content"><p class="popover__message"><strong>Walk-In</strong></p><table class="table table-bordered m-0 bg-whirt"><td><p class="m-0">' +
+            appointments[k].start +
+            "PM to " +
+            appointments[k].end +
+            'PM </p><h5 class="m-0"><strong>Ladies Haircut</strong></h5><small>45 Min with ' +
+            appointments[k].staff +
+            '</small>   </td><td class="align-middle"><strong>' +
+            appointments[k].amount +
+            "</strong></td></table></div></div>";
+          $(".time-slot[data-time='" + i + "']")
+            .find(
+              ".day-column[data-day='" +
+                moment(currentDate).add(j, "days").format("DD/MM/YYYY") +
+                "']"
+            )
+            .html(bar);
+        }
+      }
+    }
   }
 }
