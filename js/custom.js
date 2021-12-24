@@ -363,8 +363,18 @@ for (var i = 0; i < AllStaffs.length; i++) {
 $("#staffdropdown").on("click", "li", function () {
   var staffid = $(this).attr("id");
   selectedStaff = staffid;
+  if(timeFrame == "Day"){
   dayTable();
   CurrentDateAppointments();
+  }
+  else if(timeFrame == "Week"){
+    WeekTable();
+    weekAppointments();
+  }
+  else if(timeFrame == '3 Days'){
+    ThreeDayTable();
+    ThreeDayAppointments();
+  }
 });
 
 //this function will return all the appointments for given time
