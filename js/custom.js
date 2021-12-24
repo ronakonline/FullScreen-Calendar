@@ -226,6 +226,8 @@ $("#week-timeframe").on("click", function () {
   $("#ThreeDayTable").hide();
   $("#dayChart").hide();
   $("#weekTable").show();
+
+  WeekTable();
 });
 
 //On month btn click set time frame to Month
@@ -262,12 +264,15 @@ $("#nxt-date").on("click", function () {
   }
   //if time frame is Week increment current date by 1 week
   else if (timeFrame == "Week") {
+    console.log(currentDate);
     var weekstartDate = moment(currentDate).add(1, "weeks").startOf("isoWeek");
     var weekendDate = moment(currentDate).add(1, "weeks").endOf("isoWeek");
-    currentDate = weekendDate;
+    // WeekEndDateLast = weekendDate;
+    currentDate = moment(weekstartDate);
     $("#current-date").text(
       weekstartDate.format(DateFormat) + " - " + weekendDate.format(DateFormat)
     );
+    WeekTable();
   }
   //if time frame is Month increment current date by 1 month
   else if (timeFrame == "3 Days") {
@@ -290,14 +295,17 @@ $("#prev-date").on("click", function () {
   }
   //if time frame is Week decrement current date by 1 week
   else if (timeFrame == "Week") {
+    console.log(currentDate);
     var weekstartDate = moment(currentDate)
       .subtract(1, "weeks")
       .startOf("isoWeek");
     var weekendDate = moment(currentDate).subtract(1, "weeks").endOf("isoWeek");
-    currentDate = weekendDate;
+    // currentDate = weekendDate;
+    currentDate = moment(weekstartDate);
     $("#current-date").text(
       weekstartDate.format(DateFormat) + " - " + weekendDate.format(DateFormat)
     );
+    WeekTable();
   }
   //if time frame is Month decrement current date by 1 month
   else if (timeFrame == "3 Days") {
@@ -320,10 +328,12 @@ $("#today").on("click", function () {
   } else if (timeFrame == "Week") {
     var weekstartDate = moment().startOf("isoWeek");
     var weekendDate = moment().endOf("isoWeek");
-    currentDate = weekendDate;
+    //currentDate = weekendDate;
+    currentDate = moment(weekstartDate);
     $("#current-date").text(
       weekstartDate.format(DateFormat) + " - " + weekendDate.format(DateFormat)
     );
+    WeekTable();
   } else if (timeFrame == "3 Days") {
     var today = moment().format("DD,MM,YYYY");
     currentDate = moment();
@@ -566,5 +576,38 @@ function ThreeDayAppointments() {
           .html(bar);
       }
     }
+  }
+}
+
+function WeekTable() {
+  var weektable = $("#weekTable");
+  //design week table header
+  //table heading should be week days from monday to sunday
+  for (i = 0; i < 7; i++) {
+    var day = moment(currentDate).add(i, "days").format("ddd DD/MM/YY");
+    weektable.find("th:eq(" + (i + 1) + ")").text(day);
+  }
+  //remove all table rows except the first one
+  weektable.find("tr:gt(1)").remove();
+  //generate table according to opening time and closing time
+  for (var i = openingTime; i <= closingTime; i++) {
+    var time = moment().hour(i).minute(0).format("HH:mm");
+    //1st column is time and others are days column
+    var row =
+      '<tr class="time-slot" data-time="' +
+      i +
+      '"><td width="30px;" class="schedule-time sch-time"><strong>' +
+      time +
+      "</strong></td>";
+    for (var j = 0; j < 7; j++) {
+      row +=
+        '<td class="p-0 day-column" width="150px;" data-day="' +
+        moment(currentDate).add(j, "days").format("DD/MM/YYYY") +
+        '">';
+      row +=
+        '<button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button></td>';
+    }
+    row += "</tr>";
+    weektable.append(row);
   }
 }
