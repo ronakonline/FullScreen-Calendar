@@ -19,29 +19,49 @@ var Allappointments = [
   {
     id: 1,
     title: "Appointment 1",
-    date: "21/12/2021",
+    date: "25/12/2021",
     start: "12:00",
-    end: "13:00",
+    end: "12:45",
     staff: "Staff 1",
     staffid: 1,
     amount: "$45"
   },
   {
     id: 2,
+    title: "Appointment 1",
+    date: "25/12/2021",
+    start: "12:45",
+    end: "13:00",
+    staff: "Staff 1",
+    staffid: 1,
+    amount: "$45"
+  },
+  {
+    id: 3,
     title: "Appointment 2",
-    date: "21/12/2021",
-    start: "13:00",
+    date: "25/12/2021",
+    start: "12:45",
     end: "14:00",
     staff: "Staff 4",
     staffid: 4,
     amount: "$50"
   },
   {
-    id: 3,
+    id: 4,
     title: "Appointment 2",
-    date: "21/12/2021",
-    start: "14:00",
-    end: "15:00",
+    date: "25/12/2021",
+    start: "13:15",
+    end: "15:45",
+    staff: "Staff 2",
+    staffid: 2,
+    amount: "$50"
+  },
+  {
+    id: 5,
+    title: "Appointment 2",
+    date: "25/12/2021",
+    start: "13:00",
+    end: "13:15",
     staff: "Staff 2",
     staffid: 2,
     amount: "$50"
@@ -206,7 +226,7 @@ $("#day-timeframe").on("click", function () {
 
 //On week btn click set time frame to Week
 $("#week-timeframe").on("click", function () {
-  selectedStaff=1;
+  selectedStaff = 1;
   timeFrame = "Week";
   //week time format is Date Month Year - Date Month Year
   DateFormat = "DD MMM,YYYY";
@@ -363,15 +383,13 @@ for (var i = 0; i < AllStaffs.length; i++) {
 $("#staffdropdown").on("click", "li", function () {
   var staffid = $(this).attr("id");
   selectedStaff = staffid;
-  if(timeFrame == "Day"){
-  dayTable();
-  CurrentDateAppointments();
-  }
-  else if(timeFrame == "Week"){
+  if (timeFrame == "Day") {
+    dayTable();
+    CurrentDateAppointments();
+  } else if (timeFrame == "Week") {
     WeekTable();
     weekAppointments();
-  }
-  else if(timeFrame == '3 Days'){
+  } else if (timeFrame == "3 Days") {
     ThreeDayTable();
     ThreeDayAppointments();
   }
@@ -415,16 +433,25 @@ function dayTable() {
     var row =
       '<tr class="time-slot" data-time="' +
       i +
-      '"><td width="30px;" class="schedule-time sch-time"><strong>' +
+      '"><td width="30px;"  class="schedule-time sch-time"><strong>' +
       time +
       "</strong></td>";
     for (var j = 0; j < AllStaffs.length; j++) {
       row +=
-        '<td class="p-0 staff-column" width="150px;" data-staff="' +
+        '<td class="time-columns staff-column" data-staff="' +
         AllStaffs[j].id +
-        '">';
-      row +=
-        '<button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button></td>';
+        '"><table class="inner-table">';
+      for (var k = 0; k <= 3; k++) {
+        row +=
+          '<tr class="block-row"><td class="block-row min-slot" data-min="' +
+          15 * k +
+          '"><div class="block unfilled-block button block-border" data-hover="' +
+          i +
+          ":" +
+          15 * k +
+          '" data-active="IM ACTIVE"></div</td></tr>';
+      }
+      row += "</table></td>";
     }
     row += "</tr>";
     dayTable.append(row);
@@ -435,30 +462,100 @@ function dayTable() {
 function CurrentDateAppointments() {
   //loop through time slots between 12:00 and 20:00
   for (var i = 12; i <= 20; i++) {
-    var time = moment().hour(i).minute(0).format("HH:mm");
-    //get all the appointments for given time
-    var appointments = getAppointments(time, selectedStaff);
-    //if appointments exist for given time
-    if (appointments.length > 0) {
-      //loop through appointments
-      for (var j = 0; j < appointments.length; j++) {
-        //create bar for each appointment
-        var bar =
-          '<div class="popover__wrapper text-center"><a href="#"><div class="popover__title"><p>' +
-          time +
-          '</p> <h4>Walk-In</h4><small>Mens Cut</small> </div></a>  <div class="popover__content"><p class="popover__message"><strong>Walk-In</strong></p><table class="table table-bordered m-0 bg-whirt"><td><p class="m-0">' +
-          appointments[j].start +
-          "PM to " +
-          appointments[j].end +
-          'PM </p><h5 class="m-0"><strong>Ladies Haircut</strong></h5><small>45 Min with ' +
-          appointments[j].staff +
-          '</small>   </td><td class="align-middle"><strong>' +
-          appointments[j].amount +
-          "</strong></td></table></div></div>";
-        // add bar to time slot
-        $(".time-slot[data-time='" + i + "']")
-          .find(".staff-column[data-staff='" + appointments[j].staffid + "']")
-          .html(bar);
+    for (var k = 0; k <= 3; k++) {
+      var time = moment()
+        .hour(i)
+        .minute(k * 15)
+        .format("HH:mm");
+      //get all the appointments for given time
+      var appointments = getAppointments(time, selectedStaff);
+      //if appointments exist for given time
+      if (appointments.length > 0) {
+        //loop through appointments
+        for (var j = 0; j < appointments.length; j++) {
+          //random number between 1 and 4;
+          var random = Math.floor(Math.random() * 4) + 1;
+          //create bar for each appointment
+          //divide appointment into 15 min blocks
+          var start = moment(appointments[j].start, "HH:mm");
+          var end = moment(appointments[j].end, "HH:mm");
+          var startHour = start.hour();
+          var startMin = start.minute();
+          var endHour = end.hour();
+          var endMin = end.minute();
+          //console.log(startHour, startMin, endHour, endMin);
+          var bar = '<div class="block block-color'+random+' "><p>Appointment '+appointments[j].id+'</p></div>';
+          //divide start to end in 15 min blocks and loop through
+          var flag=0;
+          var endTime = endHour;
+          if (endMin == 0) {
+            endTime = endHour - 1;
+            flag =1;
+          }else{
+            flag=0;
+            endTime = endHour;
+          }
+          for (var m = startHour; m <= endHour; m++) {
+            if (startHour == endHour) {
+              for (var n = startMin; n < endMin; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".staff-column[data-staff='" +
+                      appointments[j].staffid +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            } else if (m == startHour) {
+              for (var n = startMin; n <= 60; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".staff-column[data-staff='" +
+                      appointments[j].staffid +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            }else if(m == endHour){
+              for(var n = 0; n < endMin; n+=15){
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".staff-column[data-staff='" +
+                      appointments[j].staffid +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            }else if(flag==1){
+              console.log("hi");
+              for(var n = 0; n < 60; n+=15){
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".staff-column[data-staff='" +
+                      appointments[j].staffid +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            }
+            else{
+              for (var n = 0; n <= 60; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".staff-column[data-staff='" +
+                      appointments[j].staffid +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            }
+          }
+        }
       }
     }
   }

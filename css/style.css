@@ -83,6 +83,7 @@ span.setting-icon i {
     color: #000;
     background: transparent;
     font-family: "raleway", sans-serif;
+    height: 50px;
 }
 
 
@@ -366,4 +367,47 @@ tr.disable {
     .owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev, .owl-carousel button.owl-dot{
         display: none;
     }
+}
+.time-columns{
+    padding:0px !important;
+}
+
+.inner-table {
+    padding:0px;
+    margin:0px;
+    height: 200px;
+    width: 100%;
+}
+
+.block {
+    display: block;
+    height: 50px;
+    width:100%;
+    padding: 0px;
+    margin:0px;
+}
+
+.block-color1 {
+    background-color: #c94aa9;
+}
+
+.block-color2 {
+    background-color: #ab52d4;
+}
+
+.block-color3 {
+    background-color: #7252e7;
+}
+
+.block-color4 {
+    background-color: #f7f592;
+}
+
+.block-border {
+    border-bottom: 1px solid black;
+}
+
+.block-row {
+    padding:0px !important;
+    margin:0px !important;
 }
