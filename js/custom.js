@@ -370,19 +370,15 @@ $("#today").on("click", function () {
 
 //generate staff dropdown
 for (var i = 0; i < AllStaffs.length; i++) {
-  var staff =
-    '<li id="' +
-    AllStaffs[i].id +
-    '"><a href="#" class="dropdown-item">' +
-    AllStaffs[i].name +
-    "</a></li>";
-  $("#staffdropdown").append(staff);
+  var option = $("<option>");
+  option.attr("value", AllStaffs[i].id);
+  option.text(AllStaffs[i].name);
+  $("#stafflist").append(option);
 }
 
 //Change Selected Staff and show appointments accordingly
-$("#staffdropdown").on("click", "li", function () {
-  var staffid = $(this).attr("id");
-  selectedStaff = staffid;
+$("#stafflist").on("change", function () {
+  selectedStaff = $(this).val();
   if (timeFrame == "Day") {
     dayTable();
     CurrentDateAppointments();
@@ -394,6 +390,7 @@ $("#staffdropdown").on("click", "li", function () {
     ThreeDayAppointments();
   }
 });
+
 
 //this function will return all the appointments for given time
 function getAppointments(time, staff, date = currentDate) {
