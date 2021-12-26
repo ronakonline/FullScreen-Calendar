@@ -929,11 +929,20 @@ function WeekTable() {
       "</strong></td>";
     for (var j = 0; j < 7; j++) {
       row +=
-        '<td class="p-0 day-column" width="150px;" data-day="' +
+        '<td class="time-columns date-column" data-date="' +
         moment(currentDate).add(j, "days").format("DD/MM/YYYY") +
-        '">';
-      row +=
-        '<button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button></td>';
+        '"><table class="inner-table">';
+      for (var k = 0; k <= 3; k++) {
+        row +=
+          '<tr class="block-row"><td class="block-row min-slot" data-min="' +
+          15 * k +
+          '"><div class="block unfilled-block button block-border" data-hover="' +
+          i +
+          ":" +
+          15 * k +
+          '" data-active="IM ACTIVE"></div</td></tr>';
+      }
+      row += "</table></td>";
     }
     row += "</tr>";
     weektable.append(row);
@@ -944,34 +953,106 @@ function WeekTable() {
 function weekAppointments() {
   var weektable = $("#weekTable");
   for (var i = openingTime; i <= closingTime; i++) {
-    var time = moment().hour(i).minute(0).format("HH:mm");
-    for (var j = 0; j < 7; j++) {
-      var appointments = getAppointments(
-        time,
-        selectedStaff,
-        moment(currentDate).add(j, "days")
-      );
-      if (appointments.length > 0) {
-        for (var k = 0; k < appointments.length; k++) {
-          var bar =
-            '<div class="popover__wrapper text-center"><a href="#"><div class="popover__title"><p>' +
-            time +
-            '</p> <h4>Walk-In</h4><small>Mens Cut</small> </div></a>  <div class="popover__content"><p class="popover__message"><strong>Walk-In</strong></p><table class="table table-bordered m-0 bg-whirt"><td><p class="m-0">' +
-            appointments[k].start +
-            "PM to " +
-            appointments[k].end +
-            'PM </p><h5 class="m-0"><strong>Ladies Haircut</strong></h5><small>45 Min with ' +
-            appointments[k].staff +
-            '</small>   </td><td class="align-middle"><strong>' +
-            appointments[k].amount +
-            "</strong></td></table></div></div>";
-          $(".time-slot[data-time='" + i + "']")
-            .find(
-              ".day-column[data-day='" +
-                moment(currentDate).add(j, "days").format("DD/MM/YYYY") +
-                "']"
-            )
-            .html(bar);
+    for (var k = 0; k <= 3; k++) {
+      var time = moment()
+        .hour(i)
+        .minute(k * 15)
+        .format("HH:mm");
+      for (var p = 0; p < 7; p++) {
+        var appointments = getAppointments(
+          time,
+          selectedStaff,
+          moment(currentDate).add(p, "days")
+        );
+        if (appointments.length > 0) {
+          //loop through appointments
+          for (var j = 0; j < appointments.length; j++) {
+            //random number between 1 and 4;
+            var random = Math.floor(Math.random() * 4) + 1;
+            //create bar for each appointment
+            //divide appointment into 15 min blocks
+            var start = moment(appointments[j].start, "HH:mm");
+            var end = moment(appointments[j].end, "HH:mm");
+            var startHour = start.hour();
+            var startMin = start.minute();
+            var endHour = end.hour();
+            var endMin = end.minute();
+            //console.log(startHour, startMin, endHour, endMin);
+            var bar =
+              '<div class="block block-color' +
+              random +
+              ' "><p>Appointment ' +
+              appointments[j].id +
+              "</p></div>";
+            //divide start to end in 15 min blocks and loop through
+            var flag = 0;
+            var endTime = endHour;
+            if (endMin == 0) {
+              endTime = endHour - 1;
+              flag = 1;
+            } else {
+              flag = 0;
+              endTime = endHour;
+            }
+            for (var m = startHour; m <= endHour; m++) {
+              if (startHour == endHour) {
+                for (var n = startMin; n < endMin; n += 15) {
+                  $(".time-slot[data-time='" + m + "']")
+                    .find(
+                      ".date-column[data-date='" +
+                        moment(currentDate).add(p,"days").format("DD/MM/YYYY") +
+                        "']"
+                    )
+                    .find(".min-slot[data-min='" + n + "']")
+                    .html(bar);
+                }
+              } else if (m == startHour) {
+                for (var n = startMin; n <= 60; n += 15) {
+                  $(".time-slot[data-time='" + m + "']")
+                    .find(
+                      ".date-column[data-date='" +
+                        moment(currentDate).add(p,"days").format("DD/MM/YYYY") +
+                        "']"
+                    )
+                    .find(".min-slot[data-min='" + n + "']")
+                    .html(bar);
+                }
+              } else if (m == endHour) {
+                for (var n = 0; n < endMin; n += 15) {
+                  $(".time-slot[data-time='" + m + "']")
+                    .find(
+                      ".date-column[data-date='" +
+                        moment(currentDate).add(p,"days").format("DD/MM/YYYY") +
+                        "']"
+                    )
+                    .find(".min-slot[data-min='" + n + "']")
+                    .html(bar);
+                }
+              } else if (flag == 1) {
+                for (var n = 0; n < 60; n += 15) {
+                  $(".time-slot[data-time='" + m + "']")
+                    .find(
+                      ".date-column[data-date='" +
+                        moment(currentDate).add(p,"days").format("DD/MM/YYYY") +
+                        "']"
+                    )
+                    .find(".min-slot[data-min='" + n + "']")
+                    .html(bar);
+                }
+              } else {
+                for (var n = 0; n <= 60; n += 15) {
+                  $(".time-slot[data-time='" + m + "']")
+                    .find(
+                      ".date-column[data-date='" +
+                        moment(currentDate).add(p,"days").format("DD/MM/YYYY") +
+                        "']"
+                    )
+                    .find(".min-slot[data-min='" + n + "']")
+                    .html(bar);
+                }
+              }
+            }
+          }
         }
       }
     }
