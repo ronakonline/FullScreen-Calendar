@@ -69,7 +69,7 @@ var Allappointments = [
   {
     id: 4,
     title: "Appointment 2",
-    date: "21/12/2021",
+    date: "26/12/2021",
     start: "15:00",
     end: "16:00",
     staff: "Staff 5",
@@ -79,7 +79,7 @@ var Allappointments = [
   {
     id: 5,
     title: "Appointment 2",
-    date: "21/12/2021",
+    date: "26/12/2021",
     start: "17:00",
     end: "18:00",
     staff: "Staff 3",
@@ -89,21 +89,21 @@ var Allappointments = [
   {
     id: 6,
     title: "Appointment 2",
-    date: "22/12/2021",
-    start: "17:00",
-    end: "18:00",
-    staff: "Staff 3",
-    staffid: 3,
+    date: "26/12/2021",
+    start: "12:00",
+    end: "13:45",
+    staff: "Staff 1",
+    staffid: 1,
     amount: "$90"
   },
   {
     id: 7,
     title: "Appointment 7",
-    date: "20/12/2021",
-    start: "12:00",
-    end: "13:00",
+    date: "26/12/2021",
+    start: "13:45",
+    end: "14:15",
     staff: "Staff 2",
-    staffid: 2,
+    staffid: 1,
     amount: "$70"
   },
   {
@@ -530,7 +530,6 @@ function CurrentDateAppointments() {
                   .html(bar);
               }
             }else if(flag==1){
-              console.log("hi");
               for(var n = 0; n < 60; n+=15){
                 $(".time-slot[data-time='" + m + "']")
                   .find(
@@ -585,11 +584,20 @@ function ThreeDayTable() {
     //3 columns for each day
     for (var j = 0; j < 3; j++) {
       row +=
-        '<td class="p-0 day-column" width="150px;" data-day="' +
-        moment(currentDate).add(j, "days").format("DD/MM/YYYY") +
-        '">';
-      row +=
-        '<button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button><button class="button" type="button" data-hover="12:00" data-active="IM ACTIVE"><span class="invisible">HOVER EFFECT</span></button></td>';
+        '<td class="time-columns staff-column" data-staff="' +
+        AllStaffs[j].id +
+        '"><table class="inner-table">';
+      for (var k = 0; k <= 3; k++) {
+        row +=
+          '<tr class="block-row"><td class="block-row min-slot" data-min="' +
+          15 * k +
+          '"><div class="block unfilled-block button block-border" data-hover="' +
+          i +
+          ":" +
+          15 * k +
+          '" data-active="IM ACTIVE"></div</td></tr>';
+      }
+      row += "</table></td>";
     }
     row += "</tr>";
     threedayTable.append(row);
