@@ -484,15 +484,20 @@ function CurrentDateAppointments() {
           var endHour = end.hour();
           var endMin = end.minute();
           //console.log(startHour, startMin, endHour, endMin);
-          var bar = '<div class="block block-color'+random+' "><p>Appointment '+appointments[j].id+'</p></div>';
+          var bar =
+            '<div class="block block-color' +
+            random +
+            ' "><p>Appointment ' +
+            appointments[j].id +
+            "</p></div>";
           //divide start to end in 15 min blocks and loop through
-          var flag=0;
+          var flag = 0;
           var endTime = endHour;
           if (endMin == 0) {
             endTime = endHour - 1;
-            flag =1;
-          }else{
-            flag=0;
+            flag = 1;
+          } else {
+            flag = 0;
             endTime = endHour;
           }
           for (var m = startHour; m <= endHour; m++) {
@@ -518,8 +523,8 @@ function CurrentDateAppointments() {
                   .find(".min-slot[data-min='" + n + "']")
                   .html(bar);
               }
-            }else if(m == endHour){
-              for(var n = 0; n < endMin; n+=15){
+            } else if (m == endHour) {
+              for (var n = 0; n < endMin; n += 15) {
                 $(".time-slot[data-time='" + m + "']")
                   .find(
                     ".staff-column[data-staff='" +
@@ -529,8 +534,8 @@ function CurrentDateAppointments() {
                   .find(".min-slot[data-min='" + n + "']")
                   .html(bar);
               }
-            }else if(flag==1){
-              for(var n = 0; n < 60; n+=15){
+            } else if (flag == 1) {
+              for (var n = 0; n < 60; n += 15) {
                 $(".time-slot[data-time='" + m + "']")
                   .find(
                     ".staff-column[data-staff='" +
@@ -540,8 +545,7 @@ function CurrentDateAppointments() {
                   .find(".min-slot[data-min='" + n + "']")
                   .html(bar);
               }
-            }
-            else{
+            } else {
               for (var n = 0; n <= 60; n += 15) {
                 $(".time-slot[data-time='" + m + "']")
                   .find(
@@ -584,8 +588,8 @@ function ThreeDayTable() {
     //3 columns for each day
     for (var j = 0; j < 3; j++) {
       row +=
-        '<td class="time-columns staff-column" data-staff="' +
-        AllStaffs[j].id +
+        '<td class="time-columns date-column" data-date="' +
+        moment(currentDate).add(j, "days").format("DD/MM/YYYY") +
         '"><table class="inner-table">';
       for (var k = 0; k <= 3; k++) {
         row +=
@@ -608,97 +612,295 @@ function ThreeDayTable() {
 function ThreeDayAppointments() {
   //loop throught time slots between opening time and closing time
   for (var i = openingTime; i <= closingTime; i++) {
-    var time = moment().hour(i).minute(0).format("HH:mm");
-    //get all the appointments for given time
-    var appointments = getAppointments(time, selectedStaff, currentDate);
-    //if appointments exist for given time
-    if (appointments.length > 0) {
-      //loop through appointments
-      for (var j = 0; j < appointments.length; j++) {
-        //create bar for each appointment
-        var bar =
-          '<div class="popover__wrapper text-center"><a href="#"><div class="popover__title"><p>' +
-          time +
-          '</p> <h4>Walk-In</h4><small>Mens Cut</small> </div></a>  <div class="popover__content"><p class="popover__message"><strong>Walk-In</strong></p><table class="table table-bordered m-0 bg-whirt"><td><p class="m-0">' +
-          appointments[j].start +
-          "PM to " +
-          appointments[j].end +
-          'PM </p><h5 class="m-0"><strong>Ladies Haircut</strong></h5><small>45 Min with ' +
-          appointments[j].staff +
-          '</small>   </td><td class="align-middle"><strong>' +
-          appointments[j].amount +
-          "</strong></td></table></div></div>";
-        // add bar to time slot
-        console.log(currentDate.format("DD/MM/YYYY"));
-        $(".time-slot[data-time='" + i + "']")
-          .find(
-            ".day-column[data-day='" + currentDate.format("DD/MM/YYYY") + "']"
-          )
-          .html(bar);
+    for (var k = 0; k <= 3; k++) {
+      var time = moment()
+        .hour(i)
+        .minute(k * 15)
+        .format("HH:mm");
+      //get all the appointments for given time
+      var appointments = getAppointments(time, selectedStaff, currentDate);
+      //if appointments exist for given time
+      if (appointments.length > 0) {
+        //loop through appointments
+        for (var j = 0; j < appointments.length; j++) {
+          //random number between 1 and 4;
+          var random = Math.floor(Math.random() * 4) + 1;
+          //create bar for each appointment
+          //divide appointment into 15 min blocks
+          var start = moment(appointments[j].start, "HH:mm");
+          var end = moment(appointments[j].end, "HH:mm");
+          var startHour = start.hour();
+          var startMin = start.minute();
+          var endHour = end.hour();
+          var endMin = end.minute();
+          //console.log(startHour, startMin, endHour, endMin);
+          var bar =
+            '<div class="block block-color' +
+            random +
+            ' "><p>Appointment ' +
+            appointments[j].id +
+            "</p></div>";
+          //divide start to end in 15 min blocks and loop through
+          var flag = 0;
+          var endTime = endHour;
+          if (endMin == 0) {
+            endTime = endHour - 1;
+            flag = 1;
+          } else {
+            flag = 0;
+            endTime = endHour;
+          }
+          for (var m = startHour; m <= endHour; m++) {
+            if (startHour == endHour) {
+              for (var n = startMin; n < endMin; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".date-column[data-date='" +
+                      moment(currentDate).format("DD/MM/YYYY") +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            } else if (m == startHour) {
+              for (var n = startMin; n <= 60; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".date-column[data-date='" +
+                      moment(currentDate).format("DD/MM/YYYY") +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            } else if (m == endHour) {
+              for (var n = 0; n < endMin; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".date-column[data-date='" +
+                      moment(currentDate).format("DD/MM/YYYY") +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            } else if (flag == 1) {
+              for (var n = 0; n < 60; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".date-column[data-date='" +
+                      moment(currentDate).format("DD/MM/YYYY") +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            } else {
+              for (var n = 0; n <= 60; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".date-column[data-date='" +
+                      moment(currentDate).format("DD/MM/YYYY") +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            }
+          }
+        }
       }
-    }
-    var appointments = getAppointments(
-      time,
-      selectedStaff,
-      moment(currentDate).add(1, "days")
-    );
-    //if appointments exist for given time
-    if (appointments.length > 0) {
-      //loop through appointments
-      for (var j = 0; j < appointments.length; j++) {
-        //create bar for each appointment
-        var bar =
-          '<div class="popover__wrapper text-center"><a href="#"><div class="popover__title"><p>' +
-          time +
-          '</p> <h4>Walk-In</h4><small>Mens Cut</small> </div></a>  <div class="popover__content"><p class="popover__message"><strong>Walk-In</strong></p><table class="table table-bordered m-0 bg-whirt"><td><p class="m-0">' +
-          appointments[j].start +
-          "PM to " +
-          appointments[j].end +
-          'PM </p><h5 class="m-0"><strong>Ladies Haircut</strong></h5><small>45 Min with ' +
-          appointments[j].staff +
-          '</small>   </td><td class="align-middle"><strong>' +
-          appointments[j].amount +
-          "</strong></td></table></div></div>";
-        // add bar to time slot
-        $(".time-slot[data-time='" + i + "']")
-          .find(
-            ".day-column[data-day='" +
-              moment(currentDate).add(1, "days").format("DD/MM/YYYY") +
-              "']"
-          )
-          .html(bar);
+      var appointments = getAppointments(
+        time,
+        selectedStaff,
+        moment(currentDate).add(1, "days")
+      );
+      //if appointments exist for given time
+      if (appointments.length > 0) {
+        //loop through appointments
+        for (var j = 0; j < appointments.length; j++) {
+          //random number between 1 and 4;
+          var random = Math.floor(Math.random() * 4) + 1;
+          //create bar for each appointment
+          //divide appointment into 15 min blocks
+          var start = moment(appointments[j].start, "HH:mm");
+          var end = moment(appointments[j].end, "HH:mm");
+          var startHour = start.hour();
+          var startMin = start.minute();
+          var endHour = end.hour();
+          var endMin = end.minute();
+          //console.log(startHour, startMin, endHour, endMin);
+          var bar =
+            '<div class="block block-color' +
+            random +
+            ' "><p>Appointment ' +
+            appointments[j].id +
+            "</p></div>";
+          //divide start to end in 15 min blocks and loop through
+          var flag = 0;
+          var endTime = endHour;
+          if (endMin == 0) {
+            endTime = endHour - 1;
+            flag = 1;
+          } else {
+            flag = 0;
+            endTime = endHour;
+          }
+          for (var m = startHour; m <= endHour; m++) {
+            if (startHour == endHour) {
+              for (var n = startMin; n < endMin; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".date-column[data-date='" +
+                      moment(currentDate).add(1, "days").format("DD/MM/YYYY") +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            } else if (m == startHour) {
+              for (var n = startMin; n <= 60; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".date-column[data-date='" +
+                      moment(currentDate).add(1, "days").format("DD/MM/YYYY") +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            } else if (m == endHour) {
+              for (var n = 0; n < endMin; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".date-column[data-date='" +
+                      moment(currentDate).add(1, "days").format("DD/MM/YYYY") +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            } else if (flag == 1) {
+              for (var n = 0; n < 60; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".date-column[data-date='" +
+                      moment(currentDate).add(1, "days").format("DD/MM/YYYY") +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            } else {
+              for (var n = 0; n <= 60; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".date-column[data-date='" +
+                      moment(currentDate).add(1, "days").format("DD/MM/YYYY") +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            }
+          }
+        }
       }
-    }
-    var appointments = getAppointments(
-      time,
-      selectedStaff,
-      moment(currentDate).add(2, "days")
-    );
-    //if appointments exist for given time
-    if (appointments.length > 0) {
-      //loop through appointments
-      for (var j = 0; j < appointments.length; j++) {
-        //create bar for each appointment
-        var bar =
-          '<div class="popover__wrapper text-center"><a href="#"><div class="popover__title"><p>' +
-          time +
-          '</p> <h4>Walk-In</h4><small>Mens Cut</small> </div></a>  <div class="popover__content"><p class="popover__message"><strong>Walk-In</strong></p><table class="table table-bordered m-0 bg-whirt"><td><p class="m-0">' +
-          appointments[j].start +
-          "PM to " +
-          appointments[j].end +
-          'PM </p><h5 class="m-0"><strong>Ladies Haircut</strong></h5><small>45 Min with ' +
-          appointments[j].staff +
-          '</small>   </td><td class="align-middle"><strong>' +
-          appointments[j].amount +
-          "</strong></td></table></div></div>";
-        // add bar to time slot
-        $(".time-slot[data-time='" + i + "']")
-          .find(
-            ".day-column[data-day='" +
-              moment(currentDate).add(2, "days").format("DD/MM/YYYY") +
-              "']"
-          )
-          .html(bar);
+      var appointments = getAppointments(
+        time,
+        selectedStaff,
+        moment(currentDate).add(2, "days")
+      );
+      //if appointments exist for given time
+      if (appointments.length > 0) {
+        //loop through appointments
+        for (var j = 0; j < appointments.length; j++) {
+          //random number between 1 and 4;
+          var random = Math.floor(Math.random() * 4) + 1;
+          //create bar for each appointment
+          //divide appointment into 15 min blocks
+          var start = moment(appointments[j].start, "HH:mm");
+          var end = moment(appointments[j].end, "HH:mm");
+          var startHour = start.hour();
+          var startMin = start.minute();
+          var endHour = end.hour();
+          var endMin = end.minute();
+          //console.log(startHour, startMin, endHour, endMin);
+          var bar =
+            '<div class="block block-color' +
+            random +
+            ' "><p>Appointment ' +
+            appointments[j].id +
+            "</p></div>";
+          //divide start to end in 15 min blocks and loop through
+          var flag = 0;
+          var endTime = endHour;
+          if (endMin == 0) {
+            endTime = endHour - 1;
+            flag = 1;
+          } else {
+            flag = 0;
+            endTime = endHour;
+          }
+          for (var m = startHour; m <= endHour; m++) {
+            if (startHour == endHour) {
+              for (var n = startMin; n < endMin; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".date-column[data-date='" +
+                      moment(currentDate).add(2, "days").format("DD/MM/YYYY") +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            } else if (m == startHour) {
+              for (var n = startMin; n <= 60; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".date-column[data-date='" +
+                      moment(currentDate).add(2, "days").format("DD/MM/YYYY") +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            } else if (m == endHour) {
+              for (var n = 0; n < endMin; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".date-column[data-date='" +
+                      moment(currentDate).add(2, "days").format("DD/MM/YYYY") +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            } else if (flag == 1) {
+              for (var n = 0; n < 60; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".date-column[data-date='" +
+                      moment(currentDate).add(2, "days").format("DD/MM/YYYY") +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            } else {
+              for (var n = 0; n <= 60; n += 15) {
+                $(".time-slot[data-time='" + m + "']")
+                  .find(
+                    ".date-column[data-date='" +
+                      moment(currentDate).add(2, "days").format("DD/MM/YYYY") +
+                      "']"
+                  )
+                  .find(".min-slot[data-min='" + n + "']")
+                  .html(bar);
+              }
+            }
+          }
+        }
       }
     }
   }
