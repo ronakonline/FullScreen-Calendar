@@ -19,6 +19,106 @@ var Allappointments = [
   {
     id: 1,
     title: "Appointment 1",
+    date: "28/12/2021",
+    start: "12:00",
+    end: "12:15",
+    staff: "Staff 1",
+    staffid: 1,
+    amount: "$45"
+  },
+  {
+    id: 1,
+    title: "Appointment 1",
+    date: "28/12/2021",
+    start: "12:15",
+    end: "12:45",
+    staff: "Staff 1",
+    staffid: 1,
+    amount: "$45"
+  },
+  {
+    id: 1,
+    title: "Appointment 1",
+    date: "28/12/2021",
+    start: "12:45",
+    end: "13:15",
+    staff: "Staff 1",
+    staffid: 1,
+    amount: "$45"
+  },
+  {
+    id: 1,
+    title: "Appointment 1",
+    date: "28/12/2021",
+    start: "12:00",
+    end: "12:30",
+    staff: "Staff 1",
+    staffid: 2,
+    amount: "$45"
+  },
+  {
+    id: 1,
+    title: "Appointment 1",
+    date: "28/12/2021",
+    start: "12:30",
+    end: "12:45",
+    staff: "Staff 1",
+    staffid: 2,
+    amount: "$45"
+  },
+  {
+    id: 1,
+    title: "Appointment 1",
+    date: "28/12/2021",
+    start: "12:45",
+    end: "13:45",
+    staff: "Staff 1",
+    staffid: 2,
+    amount: "$45"
+  },
+  {
+    id: 1,
+    title: "Appointment 1",
+    date: "28/12/2021",
+    start: "12:00",
+    end: "12:45",
+    staff: "Staff 1",
+    staffid: 3,
+    amount: "$45"
+  },
+  {
+    id: 1,
+    title: "Appointment 1",
+    date: "28/12/2021",
+    start: "12:45",
+    end: "13:00",
+    staff: "Staff 1",
+    staffid: 3,
+    amount: "$45"
+  },
+  {
+    id: 1,
+    title: "Appointment 1",
+    date: "28/12/2021",
+    start: "12:00",
+    end: "13:00",
+    staff: "Staff 1",
+    staffid: 4,
+    amount: "$45"
+  },
+  {
+    id: 1,
+    title: "Appointment 1",
+    date: "28/12/2021",
+    start: "12:00",
+    end: "14:30",
+    staff: "Staff 1",
+    staffid: 5,
+    amount: "$45"
+  },
+  {
+    id: 1,
+    title: "Appointment 1",
     date: "25/12/2021",
     start: "12:00",
     end: "12:45",
@@ -391,7 +491,6 @@ $("#stafflist").on("change", function () {
   }
 });
 
-
 //this function will return all the appointments for given time
 function getAppointments(time, staff, date = currentDate) {
   var appointments = [];
@@ -437,7 +536,7 @@ function dayTable() {
       row +=
         '<td class="time-columns staff-column" data-staff="' +
         AllStaffs[j].id +
-        '"><table class="inner-table">';
+        '"><div class="inner-table-block"><table class="inner-table">';
       for (var k = 0; k <= 3; k++) {
         row +=
           '<tr class="block-row"><td class="block-row min-slot" data-min="' +
@@ -448,7 +547,7 @@ function dayTable() {
           15 * k +
           '" data-active="IM ACTIVE"></div</td></tr>';
       }
-      row += "</table></td>";
+      row += "</table></div></td>";
     }
     row += "</tr>";
     dayTable.append(row);
@@ -481,12 +580,23 @@ function CurrentDateAppointments() {
           var endHour = end.hour();
           var endMin = end.minute();
           //console.log(startHour, startMin, endHour, endMin);
-          var bar =
+          var bar = '<div class="block block-color' + random + ' "></div>';
+          var bar1 =
             '<div class="block block-color' +
             random +
-            ' "><p>Appointment ' +
-            appointments[j].id +
-            "</p></div>";
+            ' "><div class="block-content1"><span class="appointment-timeing">12:00-12:15</span></div></div>';
+          var bar2 =
+            '<div class="block block-color' +
+            random +
+            ' "><div class="block-content2"><p class="appointment-timeing">12:00-12:15</p><p class="appointment-type">WALK-IN</p><p class="service">Mens Hair</p></div></div>';
+          var bar3 =
+            '<div class="block block-color' +
+            random +
+            ' "><div class="block-content3"><p class="appointment-timeing">12:00-12:15</p><p class="appointment-type">WALK-IN</p><p class="service">Mens Hair</p></div></div>';
+          var bar4 =
+            '<div class="block block-color' +
+            random +
+            ' "><div class="block-content4"><p class="appointment-timeing">12:00-12:15</p><p class="appointment-type">WALK-IN</p><p class="service">Mens Hair</p></div></div>';
           //divide start to end in 15 min blocks and loop through
           var flag = 0;
           var endTime = endHour;
@@ -497,53 +607,19 @@ function CurrentDateAppointments() {
             flag = 0;
             endTime = endHour;
           }
-          for (var m = startHour; m <= endHour; m++) {
-            if (startHour == endHour) {
-              for (var n = startMin; n < endMin; n += 15) {
-                $(".time-slot[data-time='" + m + "']")
-                  .find(
-                    ".staff-column[data-staff='" +
-                      appointments[j].staffid +
-                      "']"
-                  )
-                  .find(".min-slot[data-min='" + n + "']")
-                  .html(bar);
-              }
-            } else if (m == startHour) {
-              for (var n = startMin; n <= 60; n += 15) {
-                $(".time-slot[data-time='" + m + "']")
-                  .find(
-                    ".staff-column[data-staff='" +
-                      appointments[j].staffid +
-                      "']"
-                  )
-                  .find(".min-slot[data-min='" + n + "']")
-                  .html(bar);
-              }
-            } else if (m == endHour) {
-              for (var n = 0; n < endMin; n += 15) {
-                $(".time-slot[data-time='" + m + "']")
-                  .find(
-                    ".staff-column[data-staff='" +
-                      appointments[j].staffid +
-                      "']"
-                  )
-                  .find(".min-slot[data-min='" + n + "']")
-                  .html(bar);
-              }
-            } else if (flag == 1) {
-              for (var n = 0; n < 60; n += 15) {
-                $(".time-slot[data-time='" + m + "']")
-                  .find(
-                    ".staff-column[data-staff='" +
-                      appointments[j].staffid +
-                      "']"
-                  )
-                  .find(".min-slot[data-min='" + n + "']")
-                  .html(bar);
-              }
+          var barflag = 0;
+
+          if (startHour == endTime) {
+            m = startHour;
+            if (endMin == 0) {
+              endMin = 60;
             } else {
-              for (var n = 0; n <= 60; n += 15) {
+              endMin = endMin;
+            }
+            var totalduration = endMin - startMin;
+            barflag = 0;
+            for (var n = startMin; n < endMin; n += 15) {
+              if (barflag == 1) {
                 $(".time-slot[data-time='" + m + "']")
                   .find(
                     ".staff-column[data-staff='" +
@@ -552,6 +628,141 @@ function CurrentDateAppointments() {
                   )
                   .find(".min-slot[data-min='" + n + "']")
                   .html(bar);
+              } else {
+                if (totalduration == 15) {
+                  $(".time-slot[data-time='" + m + "']")
+                    .find(
+                      ".staff-column[data-staff='" +
+                        appointments[j].staffid +
+                        "']"
+                    )
+                    .find(".min-slot[data-min='" + n + "']")
+                    .html(bar1);
+                } else if (totalduration == 30) {
+                  $(".time-slot[data-time='" + m + "']")
+                    .find(
+                      ".staff-column[data-staff='" +
+                        appointments[j].staffid +
+                        "']"
+                    )
+                    .find(".min-slot[data-min='" + n + "']")
+                    .html(bar2);
+                } else if (totalduration == 45) {
+                  $(".time-slot[data-time='" + m + "']")
+                    .find(
+                      ".staff-column[data-staff='" +
+                        appointments[j].staffid +
+                        "']"
+                    )
+                    .find(".min-slot[data-min='" + n + "']")
+                    .html(bar3);
+                } else if (totalduration == 60) {
+                  $(".time-slot[data-time='" + m + "']")
+                    .find(
+                      ".staff-column[data-staff='" +
+                        appointments[j].staffid +
+                        "']"
+                    )
+                    .find(".min-slot[data-min='" + n + "']")
+                    .html(bar4);
+                }
+                barflag = 1;
+              }
+            }
+          } else {
+            for (var m = startHour; m <= endTime; m++) {
+              if (m == startHour) {
+                var totalduration = 60 - startMin;
+                for (var t = startHour + 1; t <= endHour; t++) {
+                  t == endHour
+                    ? (totalduration += endMin)
+                    : (totalduration += 60);
+                }
+                barflag = 0;
+                for (var n = startMin; n <= 60; n += 15) {
+                  if (barflag == 1) {
+                    $(".time-slot[data-time='" + m + "']")
+                      .find(
+                        ".staff-column[data-staff='" +
+                          appointments[j].staffid +
+                          "']"
+                      )
+                      .find(".min-slot[data-min='" + n + "']")
+                      .html(bar);
+                  } else {
+                    if (totalduration == 15) {
+                      $(".time-slot[data-time='" + m + "']")
+                        .find(
+                          ".staff-column[data-staff='" +
+                            appointments[j].staffid +
+                            "']"
+                        )
+                        .find(".min-slot[data-min='" + n + "']")
+                        .html(bar1);
+                    } else if (totalduration == 30) {
+                      $(".time-slot[data-time='" + m + "']")
+                        .find(
+                          ".staff-column[data-staff='" +
+                            appointments[j].staffid +
+                            "']"
+                        )
+                        .find(".min-slot[data-min='" + n + "']")
+                        .html(bar2);
+                    } else if (totalduration == 45) {
+                      $(".time-slot[data-time='" + m + "']")
+                        .find(
+                          ".staff-column[data-staff='" +
+                            appointments[j].staffid +
+                            "']"
+                        )
+                        .find(".min-slot[data-min='" + n + "']")
+                        .html(bar3);
+                    } else if (totalduration >= 60) {
+                      $(".time-slot[data-time='" + m + "']")
+                        .find(
+                          ".staff-column[data-staff='" +
+                            appointments[j].staffid +
+                            "']"
+                        )
+                        .find(".min-slot[data-min='" + n + "']")
+                        .html(bar4);
+                    }
+                    barflag = 1;
+                  }
+                }
+              } else if (m == endHour && flag == 0) {
+                for (var n = 0; n < endMin; n += 15) {
+                  $(".time-slot[data-time='" + m + "']")
+                    .find(
+                      ".staff-column[data-staff='" +
+                        appointments[j].staffid +
+                        "']"
+                    )
+                    .find(".min-slot[data-min='" + n + "']")
+                    .html(bar);
+                }
+              } else if (flag == 1) {
+                for (var n = 0; n < 60; n += 15) {
+                  $(".time-slot[data-time='" + m + "']")
+                    .find(
+                      ".staff-column[data-staff='" +
+                        appointments[j].staffid +
+                        "']"
+                    )
+                    .find(".min-slot[data-min='" + n + "']")
+                    .html(bar);
+                }
+              } else {
+                for (var n = 0; n <= 60; n += 15) {
+                  $(".time-slot[data-time='" + m + "']")
+                    .find(
+                      ".staff-column[data-staff='" +
+                        appointments[j].staffid +
+                        "']"
+                    )
+                    .find(".min-slot[data-min='" + n + "']")
+                    .html(bar);
+                }
               }
             }
           }
@@ -997,7 +1208,9 @@ function weekAppointments() {
                   $(".time-slot[data-time='" + m + "']")
                     .find(
                       ".date-column[data-date='" +
-                        moment(currentDate).add(p,"days").format("DD/MM/YYYY") +
+                        moment(currentDate)
+                          .add(p, "days")
+                          .format("DD/MM/YYYY") +
                         "']"
                     )
                     .find(".min-slot[data-min='" + n + "']")
@@ -1008,7 +1221,9 @@ function weekAppointments() {
                   $(".time-slot[data-time='" + m + "']")
                     .find(
                       ".date-column[data-date='" +
-                        moment(currentDate).add(p,"days").format("DD/MM/YYYY") +
+                        moment(currentDate)
+                          .add(p, "days")
+                          .format("DD/MM/YYYY") +
                         "']"
                     )
                     .find(".min-slot[data-min='" + n + "']")
@@ -1019,7 +1234,9 @@ function weekAppointments() {
                   $(".time-slot[data-time='" + m + "']")
                     .find(
                       ".date-column[data-date='" +
-                        moment(currentDate).add(p,"days").format("DD/MM/YYYY") +
+                        moment(currentDate)
+                          .add(p, "days")
+                          .format("DD/MM/YYYY") +
                         "']"
                     )
                     .find(".min-slot[data-min='" + n + "']")
@@ -1030,7 +1247,9 @@ function weekAppointments() {
                   $(".time-slot[data-time='" + m + "']")
                     .find(
                       ".date-column[data-date='" +
-                        moment(currentDate).add(p,"days").format("DD/MM/YYYY") +
+                        moment(currentDate)
+                          .add(p, "days")
+                          .format("DD/MM/YYYY") +
                         "']"
                     )
                     .find(".min-slot[data-min='" + n + "']")
@@ -1041,7 +1260,9 @@ function weekAppointments() {
                   $(".time-slot[data-time='" + m + "']")
                     .find(
                       ".date-column[data-date='" +
-                        moment(currentDate).add(p,"days").format("DD/MM/YYYY") +
+                        moment(currentDate)
+                          .add(p, "days")
+                          .format("DD/MM/YYYY") +
                         "']"
                     )
                     .find(".min-slot[data-min='" + n + "']")

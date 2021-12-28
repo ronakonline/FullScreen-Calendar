@@ -478,3 +478,7 @@ tr.disable {
     font-weight: 500;
     margin: 0px !important;
 }
+
+.inner-table-block{
+    height: 200px;
+}

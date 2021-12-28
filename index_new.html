@@ -20,6 +20,25 @@
     <title>Calendar</title>
 
     <style type="text/css">
+        .popover__wrapper:hover .popover__content {
+    z-index: 10;
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-20px, 0px);
+    transition: all 0.5s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+}
+        .popover__content {
+            opacity: 1;
+            /* visibility: hidden; */
+            position: absolute;
+            transform: translate(10px, 0px);
+            background-color: #fff;
+            box-shadow: 0 2px 5px 0 rgb(0 0 0 / 26%);
+            width: 230px;
+            right: 880px;
+            top: 260px;
+            z-index: 99;
+        }
         .dateNumber .active {
             background: #000;
             color: #fff;
@@ -157,6 +176,17 @@
             display: inline-block;
             background: var(--calendar-nextprev-bg-color);
             margin: 0 0 10px 0;
+        }
+        .appointment-timeing{
+            color: #fff !important;
+            font-size: 15px !important;
+        }
+        .appointment-type{
+            color: #fff !important;
+            font-size: 20px !important;
+        }
+        .service{
+            color: #fff !important;
         }
     </style>
 </head>
@@ -338,11 +368,22 @@
                     <td class="time-columns staff-column" data-staff="1">
                         <table class="inner-table">
                             <tr class="block-row">
-                                <td class="block-row min-slot" data-min="">
+                                <td class="block-row min-slot popover__wrapper" data-min="" style="position: relative;">
                                     <div class="block block-color1">
                                         <div class="block-content1">
                                             <span class="appointment-timeing">12:00-12:15</span>
                                         </div>
+                                    </div>
+                                    <div class="popover__content">
+                                        <p class="popover__message"><strong>Walk-In</strong></p>
+                                        <table class="table table-bordered m-0 bg-whirt">
+                                            <tbody><tr><td>
+                                                <p class="m-0">1:15 am to 2:00am</p>
+                                                <h5 class="m-0"><strong>Ladies Haircut</strong></h5>
+                                                <small>45 Min with Sean Sara</small>
+                                            </td>
+                                            <td class="align-middle"><strong>$40</strong></td>
+                                        </tr></tbody></table>
                                     </div>
                                 </td>
                             </tr>
@@ -374,13 +415,24 @@
                     <td class="time-columns staff-column" data-staff="1">
                         <table class="inner-table">
                             <tr class="block-row">
-                                <td class="block-row min-slot" data-min="">
+                                <td class="block-row min-slot popover__wrapper" data-min="">
                                     <div class="block block-color1">
                                         <div class="block-content2">
                                             <p class="appointment-timeing">12:00-12:15</p>
                                             <p class="appointment-type">WALK-IN</p>
                                             <p class="service">Men's Hair</p>
                                         </div>
+                                    </div>
+                                    <div class="popover__content">
+                                        <p class="popover__message"><strong>Walk-In</strong></p>
+                                        <table class="table table-bordered m-0 bg-whirt">
+                                            <tbody><tr><td>
+                                                <p class="m-0">1:15 am to 2:00am</p>
+                                                <h5 class="m-0"><strong>Ladies Haircut</strong></h5>
+                                                <small>45 Min with Sean Sara</small>
+                                            </td>
+                                            <td class="align-middle"><strong>$40</strong></td>
+                                        </tr></tbody></table>
                                     </div>
                                 </td>
                             </tr>
@@ -411,13 +463,24 @@
                     <td class="time-columns staff-column" data-staff="1">
                         <table class="inner-table">
                             <tr class="block-row">
-                                <td class="block-row min-slot" data-min="">
+                                <td class="block-row min-slot popover__wrapper" data-min="">
                                     <div class="block block-color1">
                                         <div class="block-content3">
                                             <p class="appointment-timeing">12:00-12:15</p>
                                             <p class="appointment-type">WALK-IN</p>
                                             <p class="service">Men's Hair</p>
                                         </div>
+                                        <div class="popover__content">
+                                        <p class="popover__message"><strong>Walk-In</strong></p>
+                                        <table class="table table-bordered m-0 bg-whirt">
+                                            <tbody><tr><td>
+                                                <p class="m-0">1:15 am to 2:00am</p>
+                                                <h5 class="m-0"><strong>Ladies Haircut</strong></h5>
+                                                <small>45 Min with Sean Sara</small>
+                                            </td>
+                                            <td class="align-middle"><strong>$40</strong></td>
+                                        </tr></tbody></table>
+                                    </div>
                                     </div>
                                 </td>
                             </tr>
@@ -449,7 +512,7 @@
                     <td class="time-columns staff-column" data-staff="1">
                         <table class="inner-table">
                             <tr class="block-row">
-                                <td class="block-row min-slot" data-min="">
+                                <td class="block-row min-slot popover__wrapper" data-min="">
                                     <div class="block block-color1">
                                         <div class="block-content4">
                                             <p class="appointment-timeing">12:00-12:15</p>
@@ -457,6 +520,17 @@
                                             <p class="service">Men's Hair</p>
                                             <p class="service">Men's Hair</p>
                                         </div>
+                                        <div class="popover__content">
+                                        <p class="popover__message"><strong>Walk-In</strong></p>
+                                        <table class="table table-bordered m-0 bg-whirt">
+                                            <tbody><tr><td>
+                                                <p class="m-0">1:15 am to 2:00am</p>
+                                                <h5 class="m-0"><strong>Ladies Haircut</strong></h5>
+                                                <small>45 Min with Sean Sara</small>
+                                            </td>
+                                            <td class="align-middle"><strong>$40</strong></td>
+                                        </tr></tbody></table>
+                                    </div>
                                     </div>
                                 </td>
                             </tr>
