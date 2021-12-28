@@ -411,3 +411,70 @@ tr.disable {
     padding:0px !important;
     margin:0px !important;
 }
+
+.block-content1 {
+    padding:0px !important;
+    margin:0px !important;
+    height:100%;
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.block-content2 {
+    padding:0px !important;
+    margin:0px !important;
+    height:200%;
+    width:100%;
+    top:0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    overflow-wrap: break-word;
+}
+
+.block-content3 {
+    padding:0px !important;
+    margin:0px !important;
+    height:300%;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.block-content4 {
+    padding:0px !important;
+    margin:0px !important;
+    height:400%;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.appointment-timeing {
+    color: #000;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0px !important;
+}
+
+.appointment-type{
+    color: #000;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0px !important;
+}
+
+.service {
+    color: #000;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0px !important;
+}
